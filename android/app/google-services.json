@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "231753337565",
+    "project_id": "eduplan-db6ce",
+    "storage_bucket": "eduplan-db6ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231753337565:android:b2e0070e021801fbee6934",
+        "android_client_info": {
+          "package_name": "com.example.jadwalgenius"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0sTkBwbIGhh7b6fx7uxdSxxR7DD3cDsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
