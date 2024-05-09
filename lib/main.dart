@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false, // Menghapus debug banner
-      home: MyHomePage(),
+      home: CalendarTablePage(),
     );
   }
 }
