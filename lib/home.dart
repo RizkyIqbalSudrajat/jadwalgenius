@@ -2,14 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 class LMSHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -63,25 +55,7 @@ class LMSHomePage extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Helo Sobat EduPlan',
-            style: GoogleFonts.poppins(color: Colors.white)),
-        backgroundColor: Color(0xffEEC143),
-        shape: ContinuousRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom:
-                Radius.circular(30), // Mengatur border radius untuk melengkung
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.account_circle),
-            onPressed: () {
-              // Tambahkan logika untuk menangani ketika avatar ditekan
-            },
-          ),
-        ],
-      ),
+      
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -117,46 +91,72 @@ class LMSHomePage extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 'Mau belajar apa hari ini sobat EduPlan?',
-                style: GoogleFonts.poppins(fontSize: 19.0),
+                style: GoogleFonts.poppins(fontSize: 15.0),
               ),
             ),
-            GridView.count(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(), // Tidak dapat digulir
-              crossAxisCount: 3,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-              padding: EdgeInsets.all(10.0),
-              children: subjects.map((subject) {
-                return GestureDetector(
-                  onTap: () {
-                    // Navigasi ke halaman kursus
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CoursePage()),
-                    );
-                  },
-                  child: Card(
-                    elevation: 5.0,
-                    color: subject[
-                        'color'], // Set warna card sesuai dengan properti warna mata pelajaran
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(subject['icon'],
-                            size: 40.0, color: Colors.white), // Set warna icon
-                        SizedBox(height: 5.0),
-                        Center(
-                          child: Text(subject['name'],
-                              style: GoogleFonts.poppins(
-                                  fontSize: 10.0,
-                                  color: Colors.white)), // Set warna teks
-                        ),
-                      ],
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius:
+                      BorderRadius.circular(20), // Set radius border container
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5), // Warna bayangan
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // Perubahan posisi bayangan
                     ),
-                  ),
-                );
-              }).toList(),
+                  ],
+                ),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  physics:
+                      NeverScrollableScrollPhysics(), // Tidak dapat digulir
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 7.0,
+                  mainAxisSpacing: 7.0,
+                  padding: EdgeInsets.all(10.0),
+                  children: subjects.map((subject) {
+                    return GestureDetector(
+                      onTap: () {
+                        // Navigasi ke halaman kursus
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CoursePage()),
+                        );
+                      },
+                      child: Card(
+                        elevation: 5.0,
+                        color: subject[
+                            'color'], // Set warna card sesuai dengan properti warna mata pelajaran
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(subject['icon'],
+                                size: 37.0,
+                                color: Colors.white), // Set warna icon
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  subject['name'],
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 10.0,
+                                      color: Colors.white), // Set warna teks
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.clip,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
             ),
           ],
         ),
