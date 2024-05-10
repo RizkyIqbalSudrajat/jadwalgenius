@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 class LMSHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,44 +22,55 @@ class LMSHomePage extends StatelessWidget {
       {
         'name': 'PKN',
         'icon': Icons.account_balance,
+        'color': Colors.red, // Tambahkan properti warna untuk PKN
       },
       {
         'name': 'Bahasa Inggris',
         'icon': Icons.language,
+        'color': Colors.blue, // Tambahkan properti warna untuk Bahasa Inggris
       },
       {
         'name': 'Matematika',
         'icon': Icons.calculate,
+        'color': Colors.green, // Tambahkan properti warna untuk Matematika
       },
       {
         'name': 'Bahasa Indonesia',
         'icon': Icons.book,
+        'color':
+            Colors.orange, // Tambahkan properti warna untuk Bahasa Indonesia
       },
       {
         'name': 'Fisika',
         'icon': Icons.science,
+        'color': Colors.purple, // Tambahkan properti warna untuk Fisika
       },
       {
         'name': 'Biologi',
         'icon': Icons.biotech,
+        'color': Colors.teal, // Tambahkan properti warna untuk Biologi
       },
       {
         'name': 'Agama',
         'icon': Icons.star,
+        'color': Colors.amber, // Tambahkan properti warna untuk Agama
       },
       {
         'name': 'Olahraga',
         'icon': Icons.sports_soccer,
+        'color': Colors.indigo, // Tambahkan properti warna untuk Olahraga
       },
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Helo Sobat EduPlan', style: GoogleFonts.poppins(color: Colors.white)),
+        title: Text('Helo Sobat EduPlan',
+            style: GoogleFonts.poppins(color: Colors.white)),
         backgroundColor: Color(0xffEEC143),
         shape: ContinuousRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30), // Mengatur border radius untuk melengkung
+            bottom:
+                Radius.circular(30), // Mengatur border radius untuk melengkung
           ),
         ),
         actions: [
@@ -123,14 +138,19 @@ class LMSHomePage extends StatelessWidget {
                   },
                   child: Card(
                     elevation: 5.0,
+                    color: subject[
+                        'color'], // Set warna card sesuai dengan properti warna mata pelajaran
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(subject['icon'], size: 40.0),
+                        Icon(subject['icon'],
+                            size: 40.0, color: Colors.white), // Set warna icon
                         SizedBox(height: 5.0),
                         Center(
                           child: Text(subject['name'],
-                              style: GoogleFonts.poppins(fontSize: 10.0)),
+                              style: GoogleFonts.poppins(
+                                  fontSize: 10.0,
+                                  color: Colors.white)), // Set warna teks
                         ),
                       ],
                     ),
@@ -144,7 +164,6 @@ class LMSHomePage extends StatelessWidget {
     );
   }
 }
-
 
 class CoursePage extends StatelessWidget {
   @override
