@@ -2,150 +2,80 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CourseDetailPage extends StatelessWidget {
+  const CourseDetailPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text('Kelas 7', style: GoogleFonts.poppins()),
           actions: [
-            IconButton(
-              icon: Icon(Icons.account_circle),
-              onPressed: () {
-                // Tambahkan logika untuk menangani ketika avatar ditekan
-              },
-            ),
           ],
         ),
-        body:
-            ListView(padding: EdgeInsets.symmetric(horizontal: 10), children: [
-          Column(
-            children: <Widget>[
-              Text(
-                'Semester 1',
-                style: GoogleFonts.poppins(fontSize: 20.0),
-              ),
-              SizedBox(height: 10.0),
-              Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Colors.black), // Tambahkan garis tepi
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Judul',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        SizedBox(height: 5), // Jarak antara judul dan subjudul
-                        Text(
-                          'Subjudul',
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
+        body: ListView(
+          children: [
+            Column(
+              children: <Widget>[
+                Text(
+                  'Semester 1',
+                  style: GoogleFonts.poppins(fontSize: 20.0),
+                ),
+                SizedBox(height: 10.0),
+                Column(
+                  children: List.generate(
+                    5, // Ubah ini sesuai jumlah item yang Anda butuhkan
+                    (index) => ContainerItem(index + 1),
                   ),
-                  ListTile(
-                    title: Text('Bab 1'),
-                    subtitle: Text("Konjungsi"),
-                    onTap: () {},
+                ),
+                Divider(),
+                Text(
+                  'Semester 2',
+                  style: GoogleFonts.poppins(fontSize: 20.0),
+                ),
+                SizedBox(height: 10.0),
+                Column(
+                  children: List.generate(
+                    5, // Ubah ini sesuai jumlah item yang Anda butuhkan
+                    (index) => ContainerItem(index + 1),
                   ),
-                  Divider(
-                    height: 0,
-                    indent: 10,
-                    endIndent: 10,
-                  ),
-                  ListTile(
-                    title: Text('Bab 1'),
-                    subtitle: Text("Konjungsi"),
-                    onTap: () {},
-                  ),
-                  Divider(
-                    height: 0,
-                    indent: 10,
-                    endIndent: 10,
-                  ),
-                  ListTile(
-                    title: Text('Bab 1'),
-                    subtitle: Text("Konjungsi"),
-                    onTap: () {},
-                  ),
-                  Divider(
-                    height: 0,
-                    indent: 10,
-                    endIndent: 10,
-                  ),
-                  ListTile(
-                    title: Text('Bab 1'),
-                    subtitle: Text("Konjungsi"),
-                    onTap: () {},
-                  ),
-                ],
-              ),
-              Text(
-                'Semester 2',
-                style: GoogleFonts.poppins(fontSize: 20.0),
-              ),
-              SizedBox(height: 10.0),
-              Column(
-                children: [
-                  ListTile(
-                    title: Text('Bab 1'),
-                    subtitle: Text("Konjungsi"),
-                    onTap: () {},
-                  ),
-                  Divider(
-                    height: 0,
-                    indent: 10,
-                    endIndent: 10,
-                  ),
-                  ListTile(
-                    title: Text('Bab 1'),
-                    subtitle: Text("Konjungsi"),
-                    onTap: () {},
-                  ),
-                  Divider(
-                    height: 0,
-                    indent: 10,
-                    endIndent: 10,
-                  ),
-                  ListTile(
-                    title: Text('Bab 1'),
-                    subtitle: Text("Konjungsi"),
-                    onTap: () {},
-                  ),
-                  Divider(
-                    height: 0,
-                    indent: 10,
-                    endIndent: 10,
-                  ),
-                  ListTile(
-                    title: Text('Bab 1'),
-                    subtitle: Text("Konjungsi"),
-                    onTap: () {},
-                  ),
-                  Divider(
-                    height: 0,
-                    indent: 10,
-                    endIndent: 10,
-                  ),
-                  ListTile(
-                    title: Text('Bab 1'),
-                    subtitle: Text("Konjungsi"),
-                    onTap: () {},
-                  ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
+          ],
+        ));
+  }
+}
+
+class ContainerItem extends StatelessWidget {
+  final int babNumber;
+
+  const ContainerItem(this.babNumber, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: EdgeInsets.all(10),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Bab $babNumber',
+            style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w500),
           ),
-        ]));
+          Divider(),
+          Text(
+            'Konjungsi',
+            style: GoogleFonts.poppins(fontSize: 14),
+          ),
+        ],
+      ),
+    );
   }
 }
