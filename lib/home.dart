@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jadwalgenius/kelas7.dart';
 
 class LMSHomePage extends StatelessWidget {
   @override
@@ -166,6 +167,8 @@ class LMSHomePage extends StatelessWidget {
 }
 
 class CoursePage extends StatelessWidget {
+  const CoursePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,9 +187,18 @@ class CoursePage extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             ListTile(
-              title: Text('Flutter Basics', style: GoogleFonts.poppins()),
-              subtitle: Text('Learn the basics of Flutter',
-                  style: GoogleFonts.poppins()),
+              title: Text('Kelas 7', style: GoogleFonts.poppins()),
+              onTap: () {
+                // Navigasi ke detail kursus
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CourseDetailPage()),
+                );
+              },
+            ),
+
+            ListTile(
+              title: Text('Kelas 8', style: GoogleFonts.poppins()),
               onTap: () {
                 // Navigasi ke detail kursus
                 Navigator.push(
@@ -196,9 +208,7 @@ class CoursePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Advanced Flutter', style: GoogleFonts.poppins()),
-              subtitle: Text('Advanced topics in Flutter development',
-                  style: GoogleFonts.poppins()),
+              title: Text('Kelas 9', style: GoogleFonts.poppins()),
               onTap: () {
                 // Navigasi ke detail kursus
                 Navigator.push(
@@ -208,48 +218,6 @@ class CoursePage extends StatelessWidget {
               },
             ),
             // Tambahkan daftar kursus lainnya di sini
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CourseDetailPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Course Details', style: GoogleFonts.poppins()),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.account_circle),
-            onPressed: () {
-              // Tambahkan logika untuk menangani ketika avatar ditekan
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Course Name: Flutter Basics',
-              style: GoogleFonts.poppins(fontSize: 20.0),
-            ),
-            SizedBox(height: 10.0),
-            Text(
-              'Description: Learn the basics of Flutter framework to build mobile apps.',
-              style: GoogleFonts.poppins(fontSize: 16.0),
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                // Lakukan aksi saat tombol ditekan (misalnya, memulai kursus)
-              },
-              child: Text('Start Course', style: GoogleFonts.poppins()),
-            ),
           ],
         ),
       ),
