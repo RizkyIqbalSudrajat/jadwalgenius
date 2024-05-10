@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jadwalgenius/PKN/detail.dart';
 import 'package:jadwalgenius/kelas7.dart';
 
 class LMSHomePage extends StatelessWidget {
@@ -125,7 +126,7 @@ class LMSHomePage extends StatelessWidget {
                         // Navigasi ke halaman kursus
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => CoursePage()),
+                          MaterialPageRoute(builder: (context) => CourseInfoScreen()),
                         );
                       },
                       child: Card(
