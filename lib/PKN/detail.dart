@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:jadwalgenius/design_course_app_theme.dart';
+import 'package:jadwalgenius/kelas7.dart';
 
 class CourseInfoScreen extends StatefulWidget {
   @override
@@ -92,31 +94,21 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Padding(
-                            padding: EdgeInsets.only(
-                                top: 32.0, left: 18, right: 16),
-                            child: Text(
-                              'Web Design\nCourse',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 22,
-                                letterSpacing: 0.27,
-                                color: DesignCourseAppTheme.darkerText,
-                              ),
-                            ),
-                          ),
                           AnimatedOpacity(
                             duration: const Duration(milliseconds: 500),
-                            opacity: opacity1,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Row(
-                                children: <Widget>[
-                                  getTimeBoxUI('24'),
-                                  getTimeBoxUI('2hours'),
-                                  getTimeBoxUI('24'),
-                                ],
+                            opacity: opacity2,
+                            child: const Padding(
+                              padding: EdgeInsets.only(
+                                  top: 32.0, left: 18, right: 16),
+                              child: Text(
+                                'PKN',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 22,
+                                  letterSpacing: 0.27,
+                                  color: DesignCourseAppTheme.darkerText,
+                                ),
                               ),
                             ),
                           ),
@@ -124,27 +116,42 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
                             child: AnimatedOpacity(
                               duration: const Duration(milliseconds: 500),
                               opacity: opacity2,
-                              child: const Padding(
-                                padding: EdgeInsets.only(
-                                    left: 16, right: 16, top: 8, bottom: 8),
-                                child: Text(
-                                  'Lorem ipsum is simply dummy text of printing & typesetting industry, Lorem ipsum is simply dummy text of printing & typesetting industry.',
-                                  textAlign: TextAlign.justify,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w200,
-                                    fontSize: 14,
-                                    letterSpacing: 0.27,
-                                    color: DesignCourseAppTheme.grey,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 16, right: 16, top: 8, bottom: 8),
+                                    child: Text(
+                                      'Pendidikan Kewarganegaraan adalah suatu mata pelajaran yang merupakan satu rangkaian proses untuk mengarahkan peserta didik menjadi bertanggung jawab sehingga dapat berperan aktif dalam masyarakat sesuai ketentuan Pancasila dan UUD NKRI 1945',
+                                      textAlign: TextAlign.justify,
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 14,
+                                        letterSpacing: 0.27,
+                                        color: Colors.black,
+                                      ),
+                                    ),
                                   ),
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                                  AnimatedOpacity(
+                                    duration: const Duration(milliseconds: 500),
+                                    opacity: opacity1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Row(
+                                        children: <Widget>[
+                                          getTimeBoxUI('Kelas 7'),
+                                          getTimeBoxUI('Kelas 8'),
+                                          getTimeBoxUI('Kelas 9'),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                           SizedBox(
                             height: MediaQuery.of(context).padding.bottom,
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -182,35 +189,44 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
   Widget getTimeBoxUI(String text1) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: DesignCourseAppTheme.nearlyWhite,
-          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: DesignCourseAppTheme.grey.withOpacity(0.2),
-                offset: const Offset(1.1, 1.1),
-                blurRadius: 8.0),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              left: 18.0, right: 18.0, top: 12.0, bottom: 12.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                text1,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  letterSpacing: 0.27,
-                  color: const Color(0xffEEC143),
-                ),
-              ),
+      child: GestureDetector(
+        onTap: () {
+          // Navigasi ke halaman kursus
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CourseDetailPage()),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: DesignCourseAppTheme.nearlyWhite,
+            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: DesignCourseAppTheme.grey.withOpacity(0.2),
+                  offset: const Offset(1.1, 1.1),
+                  blurRadius: 8.0),
             ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                left: 18.0, right: 18.0, top: 12.0, bottom: 12.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  text1,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    letterSpacing: 0.27,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
