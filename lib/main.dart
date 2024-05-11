@@ -1,10 +1,10 @@
+import 'package:EduPlan/home.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:jadwalgenius/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
 
         actions: [
           IconButton(
-            icon: Icon(Icons.account_circle),
+            icon: Icon(Icons.account_circle, color: Colors.white,),
             onPressed: () {
               // Tambahkan logika untuk menangani ketika avatar ditekan
             },

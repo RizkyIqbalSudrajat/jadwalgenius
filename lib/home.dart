@@ -1,8 +1,9 @@
+import 'package:EduPlan/PKN/detail.dart';
+import 'package:EduPlan/kelas7.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jadwalgenius/PKN/detail.dart';
-import 'package:jadwalgenius/kelas7.dart';
+
 
 class LMSHomePage extends StatelessWidget {
   @override

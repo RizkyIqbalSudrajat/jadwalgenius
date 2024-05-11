@@ -1,8 +1,9 @@
+import 'package:EduPlan/design_course_app_theme.dart';
+import 'package:EduPlan/PKN/kelas7.dart';
+import 'package:EduPlan/kelas7.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jadwalgenius/design_course_app_theme.dart';
-import 'package:jadwalgenius/kelas7.dart';
 
 class CourseInfoScreen extends StatefulWidget {
   @override
@@ -191,10 +192,26 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () {
-          // Navigasi ke halaman kursus
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CourseDetailPage()),
+            PageRouteBuilder(
+              transitionDuration:
+                  Duration(milliseconds: 250), // Durasi transisi
+              pageBuilder: (_, __, ___) =>
+                  kelas7(), // Widget yang akan ditampilkan
+              transitionsBuilder: (_, animation, __, child) {
+                return SlideTransition(
+                  // Efek transisi slide
+                  position: Tween<Offset>(
+                    begin: const Offset(
+                        1.0, 0.0), // Mulai dari luar layar sebelah kanan
+                    end: Offset
+                        .zero, // Posisi akhir, nol karena ingin pindah ke tengah layar
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            ),
           );
         },
         child: Container(

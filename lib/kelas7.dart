@@ -42,6 +42,12 @@ class CourseDetailPage extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Tambahkan fungsi yang ingin dijalankan ketika FAB ditekan
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
