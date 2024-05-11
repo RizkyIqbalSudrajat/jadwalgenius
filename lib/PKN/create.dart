@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
 
@@ -13,6 +14,9 @@ class _CreatePageState extends State<CreatePage> {
   String? _selectedSemester;
   List<String> _semesterOptions = [];
   List<File> _selectedFiles = []; // List to store all selected files
+  TextEditingController _judulMateriController = TextEditingController();
+  TextEditingController _keteranganMateriController = TextEditingController();
+  bool _filesUploaded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +51,32 @@ class _CreatePageState extends State<CreatePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               TextFormField(
+                controller: _judulMateriController,
                 style: GoogleFonts.poppins(),
                 decoration: InputDecoration(
                   labelText: 'Judul Materi',
                   labelStyle: GoogleFonts.poppins(),
                 ),
+                onChanged: (_) {
+                  setState(() {
+                    _updateUploadButtonVisibility();
+                  });
+                },
               ),
               SizedBox(height: 20),
               TextFormField(
+                controller: _keteranganMateriController,
                 style: GoogleFonts.poppins(),
                 decoration: InputDecoration(
                   labelText: 'Keterangan Materi',
                   labelStyle: GoogleFonts.poppins(),
                 ),
                 maxLines: 3,
+                onChanged: (_) {
+                  setState(() {
+                    _updateUploadButtonVisibility();
+                  });
+                },
               ),
               SizedBox(height: 20),
               Row(
@@ -86,6 +102,7 @@ class _CreatePageState extends State<CreatePage> {
                           _selectedKelas = selectedKelas;
                           _selectedSemester = null; // Reset selected semester
                           _semesterOptions = _getSemesterOptions(selectedKelas);
+                          _updateUploadButtonVisibility();
                         });
                       },
                     ),
@@ -111,6 +128,7 @@ class _CreatePageState extends State<CreatePage> {
                         onChanged: (String? selectedSemester) {
                           setState(() {
                             _selectedSemester = selectedSemester;
+                            _updateUploadButtonVisibility();
                           });
                         },
                       ),
@@ -126,12 +144,26 @@ class _CreatePageState extends State<CreatePage> {
                     setState(() {
                       _selectedFiles
                           .addAll(result.files.map((file) => File(file.path!)));
+                      _updateUploadButtonVisibility();
                     });
                   }
                 },
                 child: Text(
                   'Pilih File',
                   style: GoogleFonts.poppins(),
+                ),
+              ),
+                            Visibility(
+                visible: _canUpload(),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Implement your upload logic here
+                    // Example: uploadFiles(_selectedFiles);
+                  },
+                  child: Text(
+                    'Unggah',
+                    style: GoogleFonts.poppins(),
+                  ),
                 ),
               ),
               SizedBox(height: 15),
@@ -149,9 +181,21 @@ class _CreatePageState extends State<CreatePage> {
                           children: [
                             Icon(_getFileIcon(file.path)),
                             SizedBox(width: 10),
-                            Text(
-                              file.path.split('/').last,
-                              style: GoogleFonts.poppins(),
+                            Expanded(
+                              child: Text(
+                                file.path.split('/').last,
+                                style: GoogleFonts.poppins(),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedFiles.remove(file);
+                                  _updateUploadButtonVisibility();
+                                });
+                              },
+                              child: Icon(Icons.close),
                             ),
                           ],
                         ),
@@ -160,6 +204,7 @@ class _CreatePageState extends State<CreatePage> {
                   );
                 }).toList(),
               ),
+              SizedBox(height: 20),
             ],
           ),
         ),
@@ -201,5 +246,27 @@ class _CreatePageState extends State<CreatePage> {
     } else {
       return Icons.insert_drive_file;
     }
+  }
+
+  bool _canUpload() {
+    return (_selectedFiles.isNotEmpty &&
+        _selectedKelas != null &&
+        _selectedSemester != null &&
+        _judulMateriController.text.isNotEmpty &&
+        _keteranganMateriController.text.isNotEmpty);
+  }
+
+  void _updateUploadButtonVisibility() {
+    setState(() {
+      // Check if all required fields are filled and at least one file is selected
+      _filesUploaded = _canUpload();
+    });
+  }
+
+  @override
+  void dispose() {
+    _judulMateriController.dispose();
+    _keteranganMateriController.dispose();
+    super.dispose();
   }
 }
