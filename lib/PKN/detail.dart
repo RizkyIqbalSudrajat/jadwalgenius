@@ -1,6 +1,7 @@
 import 'package:EduPlan/design_course_app_theme.dart';
 import 'package:EduPlan/PKN/kelas7.dart';
-import 'package:EduPlan/kelas7.dart';
+import 'package:EduPlan/PKN/kelas8.dart';
+import 'package:EduPlan/PKN/kelas9.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,7 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
   double opacity1 = 0.0;
   double opacity2 = 0.0;
   double opacity3 = 0.0;
+  
   @override
   void initState() {
     animationController = AnimationController(
@@ -192,27 +194,63 @@ class _CourseInfoScreenState extends State<CourseInfoScreen>
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              transitionDuration:
-                  Duration(milliseconds: 250), // Durasi transisi
-              pageBuilder: (_, __, ___) =>
-                  kelas7(), // Widget yang akan ditampilkan
-              transitionsBuilder: (_, animation, __, child) {
-                return SlideTransition(
-                  // Efek transisi slide
-                  position: Tween<Offset>(
-                    begin: const Offset(
-                        1.0, 0.0), // Mulai dari luar layar sebelah kanan
-                    end: Offset
-                        .zero, // Posisi akhir, nol karena ingin pindah ke tengah layar
-                  ).animate(animation),
-                  child: child,
-                );
-              },
-            ),
-          );
+          // Navigasi berdasarkan teks yang dipilih
+          switch (text1) {
+            case 'Kelas 7':
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 250),
+                  pageBuilder: (_, __, ___) => kelas7(),
+                  transitionsBuilder: (_, animation, __, child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+              break;
+            case 'Kelas 8':
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 250),
+                  pageBuilder: (_, __, ___) => kelas8(),
+                  transitionsBuilder: (_, animation, __, child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+              break;
+            case 'Kelas 9':
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 250),
+                  pageBuilder: (_, __, ___) => kelas9(),
+                  transitionsBuilder: (_, animation, __, child) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(1.0, 0.0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+              break;
+          }
         },
         child: Container(
           decoration: BoxDecoration(

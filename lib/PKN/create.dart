@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,6 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
 
 class CreatePage extends StatefulWidget {
+  const CreatePage({super.key});
+
   @override
   _CreatePageState createState() => _CreatePageState();
 }
@@ -13,9 +16,10 @@ class _CreatePageState extends State<CreatePage> {
   String? _selectedKelas;
   String? _selectedSemester;
   List<String> _semesterOptions = [];
-  List<File> _selectedFiles = []; // List to store all selected files
-  TextEditingController _judulMateriController = TextEditingController();
-  TextEditingController _keteranganMateriController = TextEditingController();
+  final List<File> _selectedFiles = []; // List to store all selected files
+  final TextEditingController _judulMateriController = TextEditingController();
+  final TextEditingController _keteranganMateriController =
+      TextEditingController();
   bool _filesUploaded = false;
 
   @override
@@ -63,7 +67,7 @@ class _CreatePageState extends State<CreatePage> {
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: _keteranganMateriController,
                 style: GoogleFonts.poppins(),
@@ -71,14 +75,14 @@ class _CreatePageState extends State<CreatePage> {
                   labelText: 'Keterangan Materi',
                   labelStyle: GoogleFonts.poppins(),
                 ),
-                maxLines: 3,
+                maxLines: null,
                 onChanged: (_) {
                   setState(() {
                     _updateUploadButtonVisibility();
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
@@ -107,12 +111,12 @@ class _CreatePageState extends State<CreatePage> {
                       },
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   Expanded(
                     child: Opacity(
                       opacity: _selectedKelas != null ? 1.0 : 0.5,
                       child: DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Semester',
                         ),
                         value: _selectedSemester,
@@ -136,7 +140,7 @@ class _CreatePageState extends State<CreatePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   final result = await FilePicker.platform.pickFiles();
@@ -153,12 +157,42 @@ class _CreatePageState extends State<CreatePage> {
                   style: GoogleFonts.poppins(),
                 ),
               ),
-                            Visibility(
+              Visibility(
                 visible: _canUpload(),
                 child: ElevatedButton(
                   onPressed: () {
-                    // Implement your upload logic here
-                    // Example: uploadFiles(_selectedFiles);
+                    // Memastikan semua field yang diperlukan terisi
+                    if (_canUpload()) {
+                      // Mendapatkan instance Firestore
+                      final firestore = FirebaseFirestore.instance;
+
+                      // Menyiapkan data yang akan disimpan
+                      final data = {
+                        'judulMateri': _judulMateriController.text,
+                        'keteranganMateri': _keteranganMateriController.text,
+                        'kelas': _selectedKelas,
+                        'semester': _selectedSemester,
+                        // Tambahkan data lain jika diperlukan
+                      };
+
+                      // Menambahkan data ke Firestore
+                      firestore.collection('PKN').add(data).then((value) {
+                        // Data berhasil disimpan
+                        print('Data berhasil disimpan dengan ID: ${value.id}');
+                        // Reset field setelah disimpan
+                        _judulMateriController.clear();
+                        _keteranganMateriController.clear();
+                        setState(() {
+                          _selectedKelas = null;
+                          _selectedSemester = null;
+                          _selectedFiles.clear();
+                          _filesUploaded = false;
+                        });
+                      }).catchError((error) {
+                        // Kesalahan saat menyimpan data
+                        print('Error: $error');
+                      });
+                    }
                   },
                   child: Text(
                     'Unggah',
@@ -166,7 +200,7 @@ class _CreatePageState extends State<CreatePage> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               // Display selected files
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -180,7 +214,7 @@ class _CreatePageState extends State<CreatePage> {
                         child: Row(
                           children: [
                             Icon(_getFileIcon(file.path)),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: Text(
                                 file.path.split('/').last,
@@ -195,7 +229,7 @@ class _CreatePageState extends State<CreatePage> {
                                   _updateUploadButtonVisibility();
                                 });
                               },
-                              child: Icon(Icons.close),
+                              child: const Icon(Icons.close),
                             ),
                           ],
                         ),
@@ -204,7 +238,7 @@ class _CreatePageState extends State<CreatePage> {
                   );
                 }).toList(),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -249,8 +283,7 @@ class _CreatePageState extends State<CreatePage> {
   }
 
   bool _canUpload() {
-    return (_selectedFiles.isNotEmpty &&
-        _selectedKelas != null &&
+    return (_selectedKelas != null &&
         _selectedSemester != null &&
         _judulMateriController.text.isNotEmpty &&
         _keteranganMateriController.text.isNotEmpty);
