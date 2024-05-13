@@ -1,4 +1,11 @@
-import 'package:EduPlan/PKN/detail.dart';
+import 'package:EduPlan/Agama/screen.dart';
+import 'package:EduPlan/BhsIndonesia/screen.dart';
+import 'package:EduPlan/BhsInggris/screen.dart';
+import 'package:EduPlan/Biologi/screen.dart';
+import 'package:EduPlan/Fisika/screen.dart';
+import 'package:EduPlan/Matematika/screen.dart';
+import 'package:EduPlan/Olahraga/screen.dart';
+import 'package:EduPlan/PKN/screen.dart';
 import 'package:EduPlan/kelas7.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -23,37 +30,44 @@ class LMSHomePage extends StatelessWidget {
         'name': 'Bahasa Inggris',
         'icon': Icons.language,
         'color': Colors.blue, // Tambahkan properti warna untuk Bahasa Inggris
+        'screen': bhsinggris(), // Tambahkan layar yang sesuai
       },
       {
         'name': 'Matematika',
         'icon': Icons.calculate,
         'color': Colors.green, // Tambahkan properti warna untuk Matematika
+        'screen': Matematika(), // Tambahkan layar yang sesuai
       },
       {
         'name': 'Bahasa Indonesia',
         'icon': Icons.book,
         'color':
             Colors.orange, // Tambahkan properti warna untuk Bahasa Indonesia
+        'screen': BahasaIndonesia(), // Tambahkan layar yang sesuai
       },
       {
         'name': 'Fisika',
         'icon': Icons.science,
         'color': Colors.purple, // Tambahkan properti warna untuk Fisika
+        'screen': Fisika(), // Tambahkan layar yang sesuai
       },
       {
         'name': 'Biologi',
         'icon': Icons.biotech,
         'color': Colors.teal, // Tambahkan properti warna untuk Biologi
+        'screen': Biologi(), // Tambahkan layar yang sesuai
       },
       {
         'name': 'Agama',
         'icon': Icons.star,
         'color': Colors.amber, // Tambahkan properti warna untuk Agama
+        'screen': Agama(), // Tambahkan layar yang sesuai
       },
       {
         'name': 'Olahraga',
         'icon': Icons.sports_soccer,
         'color': Colors.indigo, // Tambahkan properti warna untuk Olahraga
+        'screen': Olahraga(), // Tambahkan layar yang sesuai
       },
     ];
 

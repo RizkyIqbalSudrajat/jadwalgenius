@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:EduPlan/home.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';

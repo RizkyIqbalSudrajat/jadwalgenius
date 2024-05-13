@@ -1,25 +1,24 @@
+import 'package:EduPlan/Fisika/kelas7.dart';
+import 'package:EduPlan/Fisika/kelas8.dart';
+import 'package:EduPlan/Fisika/kelas9.dart';
 import 'package:EduPlan/design_course_app_theme.dart';
-import 'package:EduPlan/PKN/kelas7.dart';
-import 'package:EduPlan/PKN/kelas8.dart';
-import 'package:EduPlan/PKN/kelas9.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class pknscreen extends StatefulWidget {
+class Fisika extends StatefulWidget {
   @override
-  _pknscreenstate createState() => _pknscreenstate();
+  _FisikaState createState() => _FisikaState();
 }
 
-class _pknscreenstate extends State<pknscreen>
-    with TickerProviderStateMixin {
+class _FisikaState extends State<Fisika> with TickerProviderStateMixin {
   final double infoHeight = 364.0;
   AnimationController? animationController;
   Animation<double>? animation;
   double opacity1 = 0.0;
   double opacity2 = 0.0;
   double opacity3 = 0.0;
-  
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -62,7 +61,7 @@ class _pknscreenstate extends State<pknscreen>
               children: <Widget>[
                 AspectRatio(
                   aspectRatio: 1.2,
-                  child: Image.asset('assets/design_course/webInterFace.png'),
+                  child: Image.asset('assets/mapel/fisika.jpg'),
                 ),
               ],
             ),
@@ -100,13 +99,13 @@ class _pknscreenstate extends State<pknscreen>
                           AnimatedOpacity(
                             duration: const Duration(milliseconds: 500),
                             opacity: opacity2,
-                            child: const Padding(
+                            child: Padding(
                               padding: EdgeInsets.only(
                                   top: 32.0, left: 18, right: 16),
                               child: Text(
-                                'PKN',
+                                'Fisika',
                                 textAlign: TextAlign.left,
-                                style: TextStyle(
+                                style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 22,
                                   letterSpacing: 0.27,
@@ -125,7 +124,7 @@ class _pknscreenstate extends State<pknscreen>
                                     padding: EdgeInsets.only(
                                         left: 16, right: 16, top: 8, bottom: 8),
                                     child: Text(
-                                      'Pendidikan Kewarganegaraan adalah suatu mata pelajaran yang merupakan satu rangkaian proses untuk mengarahkan peserta didik menjadi bertanggung jawab sehingga dapat berperan aktif dalam masyarakat sesuai ketentuan Pancasila dan UUD NKRI 1945',
+                                      'Fisika adalah studi tentang alam semesta, energi, materi, dan interaksi di antara keduanya. Ini mencakup konsep seperti gerak, energi, listrik, magnetisme, gelombang, mekanika kuantum, dan relativitas.',
                                       textAlign: TextAlign.justify,
                                       style: GoogleFonts.poppins(
                                         fontSize: 14,
