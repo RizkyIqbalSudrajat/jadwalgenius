@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class LMSHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -18,6 +17,7 @@ class LMSHomePage extends StatelessWidget {
         'name': 'PKN',
         'icon': Icons.account_balance,
         'color': Colors.red, // Tambahkan properti warna untuk PKN
+        'screen': pknscreen(), // Tambahkan layar yang sesuai
       },
       {
         'name': 'Bahasa Inggris',
@@ -58,7 +58,6 @@ class LMSHomePage extends StatelessWidget {
     ];
 
     return Scaffold(
-      
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -102,21 +101,19 @@ class LMSHomePage extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius:
-                      BorderRadius.circular(20), // Set radius border container
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5), // Warna bayangan
+                      color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 5,
                       blurRadius: 7,
-                      offset: Offset(0, 3), // Perubahan posisi bayangan
+                      offset: Offset(0, 3),
                     ),
                   ],
                 ),
                 child: GridView.count(
                   shrinkWrap: true,
-                  physics:
-                      NeverScrollableScrollPhysics(), // Tidak dapat digulir
+                  physics: NeverScrollableScrollPhysics(),
                   crossAxisCount: 3,
                   crossAxisSpacing: 7.0,
                   mainAxisSpacing: 7.0,
@@ -124,30 +121,28 @@ class LMSHomePage extends StatelessWidget {
                   children: subjects.map((subject) {
                     return GestureDetector(
                       onTap: () {
-                        // Navigasi ke halaman kursus
+                        // Navigasi ke halaman kursus yang sesuai
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => CourseInfoScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => subject['screen']),
                         );
                       },
                       child: Card(
                         elevation: 5.0,
-                        color: subject[
-                            'color'], // Set warna card sesuai dengan properti warna mata pelajaran
+                        color: subject['color'],
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(subject['icon'],
-                                size: 37.0,
-                                color: Colors.white), // Set warna icon
+                                size: 37.0, color: Colors.white),
                             Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   subject['name'],
                                   style: GoogleFonts.poppins(
-                                      fontSize: 10.0,
-                                      color: Colors.white), // Set warna teks
+                                      fontSize: 10.0, color: Colors.white),
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.clip,
                                 ),

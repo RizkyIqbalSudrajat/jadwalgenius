@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CourseInfoScreen extends StatefulWidget {
+class pknscreen extends StatefulWidget {
   @override
-  _CourseInfoScreenState createState() => _CourseInfoScreenState();
+  _pknscreenstate createState() => _pknscreenstate();
 }
 
-class _CourseInfoScreenState extends State<CourseInfoScreen>
+class _pknscreenstate extends State<pknscreen>
     with TickerProviderStateMixin {
   final double infoHeight = 364.0;
   AnimationController? animationController;
