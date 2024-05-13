@@ -172,6 +172,15 @@ class _CreatePageState extends State<CreatePage> {
                         'keteranganMateri': _keteranganMateriController.text,
                         'kelas': _selectedKelas,
                         'semester': _selectedSemester,
+                        'files': _selectedFiles.map((file) {
+                          // Contoh menyimpan informasi file ke Firestore
+                          return {
+                            'fileName': file.path.split('/').last,
+                            'filePath': file
+                                .path, // atau URL file jika disimpan di Storage
+                            'fileType': _getFileIcon(file.path).toString(),
+                          };
+                        }).toList(),
                         // Tambahkan data lain jika diperlukan
                       };
 
@@ -286,7 +295,8 @@ class _CreatePageState extends State<CreatePage> {
     return (_selectedKelas != null &&
         _selectedSemester != null &&
         _judulMateriController.text.isNotEmpty &&
-        _keteranganMateriController.text.isNotEmpty);
+        _keteranganMateriController.text.isNotEmpty &&
+        _selectedFiles.isNotEmpty);
   }
 
   void _updateUploadButtonVisibility() {
