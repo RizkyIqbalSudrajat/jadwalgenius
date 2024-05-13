@@ -15,9 +15,9 @@ class LMSHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> images = [
-      'https://example.com/image1.jpg',
-      'https://example.com/image2.jpg',
-      'https://example.com/image3.jpg',
+      'assets/mapel/1.jpg',
+      'assets/mapel/2.jpg',
+      'assets/mapel/3.jpg',
     ]; // Ganti URL dengan URL gambar Anda
     List<Map<String, dynamic>> subjects = [
       {
@@ -96,6 +96,10 @@ class LMSHomePage extends StatelessWidget {
                         margin: EdgeInsets.symmetric(horizontal: 5.0),
                         decoration: BoxDecoration(
                           color: Colors.amber,
+                          image: DecorationImage(
+                            image: AssetImage(image),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       );
                     },
@@ -170,65 +174,6 @@ class LMSHomePage extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CoursePage extends StatelessWidget {
-  const CoursePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Courses', style: GoogleFonts.poppins()),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.account_circle),
-            onPressed: () {
-              // Tambahkan logika untuk menangani ketika avatar ditekan
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: ListView(
-          children: <Widget>[
-            ListTile(
-              title: Text('Kelas 7', style: GoogleFonts.poppins()),
-              onTap: () {
-                // Navigasi ke detail kursus
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CourseDetailPage()),
-                );
-              },
-            ),
-
-            ListTile(
-              title: Text('Kelas 8', style: GoogleFonts.poppins()),
-              onTap: () {
-                // Navigasi ke detail kursus
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CourseDetailPage()),
-                );
-              },
-            ),
-            ListTile(
-              title: Text('Kelas 9', style: GoogleFonts.poppins()),
-              onTap: () {
-                // Navigasi ke detail kursus
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CourseDetailPage()),
-                );
-              },
-            ),
-            // Tambahkan daftar kursus lainnya di sini
           ],
         ),
       ),
