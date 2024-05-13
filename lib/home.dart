@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:EduPlan/Agama/screen.dart';
 import 'package:EduPlan/BhsIndonesia/screen.dart';
 import 'package:EduPlan/BhsInggris/screen.dart';

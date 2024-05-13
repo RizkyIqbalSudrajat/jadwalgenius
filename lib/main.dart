@@ -1,6 +1,7 @@
 // ignore_for_file: unused_field
 
 import 'package:EduPlan/home.dart';
+import 'package:EduPlan/introduction_animation/introduction_animation_screen.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false, // Menghapus debug banner
-      home: MainScreen(),
+      home: const IntroductionAnimationScreen(),
     );
   }
 }
@@ -49,10 +50,12 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+
         title: Text('Helo Sobat EduPlan',
             style: GoogleFonts.poppins(color: Colors.white)),
-        backgroundColor: Color(0xffEEC143),
-        shape: ContinuousRectangleBorder(
+        backgroundColor: const Color(0xffEEC143),
+        shape: const ContinuousRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom:
                 Radius.circular(30), // Mengatur border radius untuk melengkung
@@ -60,38 +63,10 @@ class _MainScreenState extends State<MainScreen> {
         ),
         toolbarHeight: 50, // Mengubah tinggi AppBar
 
-        actions: [
-          IconButton(
-            icon: Icon(Icons.account_circle, color: Colors.white,),
-            onPressed: () {
-              // Tambahkan logika untuk menangani ketika avatar ditekan
-            },
-          ),
-        ],
       ),
       body: <Widget>[
         LMSHomePage(),
       ][_selectedIndex], // Set the body based on the selected index
-      bottomNavigationBar: CurvedNavigationBar(
-        color: Color(0xffEEC143),
-        animationDuration: const Duration(milliseconds: 400),
-        backgroundColor: Colors.transparent,
-        height: 50,
-        items: [
-          CurvedNavigationBarItem(
-            child: const Icon(
-              Icons.home_outlined,
-              color: Colors.white,
-            ),
-            labelStyle: GoogleFonts.poppins(color: Colors.white),
-          )
-        ],
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-      ),
     );
   }
 }
