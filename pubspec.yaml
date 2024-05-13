@@ -45,6 +45,13 @@ dependencies:
   curved_labeled_navigation_bar: ^2.0.2
   file_picker: ^8.0.3
   animations: ^2.0.11
+  firebase_storage: ^11.7.5
+  webview_flutter: ^3.0.4
+  url_launcher: ^6.0.13
+  path_provider: ^2.0.5
+  http: ^1.2.1
+  flutter_inappwebview: ^6.0.0
+  flutter_downloader: ^1.11.7
 
 
 dev_dependencies:

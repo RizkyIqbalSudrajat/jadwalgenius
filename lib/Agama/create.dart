@@ -1,14 +1,11 @@
-// ignore_for_file: unused_field
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 
 class CreatePage extends StatefulWidget {
-  const CreatePage({super.key});
+  const CreatePage({Key? key}) : super(key: key);
 
   @override
   _CreatePageState createState() => _CreatePageState();
@@ -18,237 +15,120 @@ class _CreatePageState extends State<CreatePage> {
   String? _selectedKelas;
   String? _selectedSemester;
   List<String> _semesterOptions = [];
-  final List<File> _selectedFiles = []; // List to store all selected files
+  final List<File> _selectedFiles = [];
   final TextEditingController _judulMateriController = TextEditingController();
-  final TextEditingController _keteranganMateriController =
-      TextEditingController();
+  final TextEditingController _keteranganMateriController = TextEditingController();
   bool _filesUploaded = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.white,
-          ),
-        ),
-        title: Text(
-          'Tambah Materi',
-          style: GoogleFonts.poppins(color: Colors.white),
-        ),
-        backgroundColor: const Color(0xffEEC143),
-        shape: const ContinuousRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30),
-          ),
-        ),
-        toolbarHeight: 50,
+        title: Text('Tambah Materi'),
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: _judulMateriController,
-                style: GoogleFonts.poppins(),
-                decoration: InputDecoration(
-                  labelText: 'Judul Materi',
-                  labelStyle: GoogleFonts.poppins(),
-                ),
-                onChanged: (_) {
-                  setState(() {
-                    _updateUploadButtonVisibility();
-                  });
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _keteranganMateriController,
-                style: GoogleFonts.poppins(),
-                decoration: InputDecoration(
-                  labelText: 'Keterangan Materi',
-                  labelStyle: GoogleFonts.poppins(),
-                ),
-                maxLines: null,
-                onChanged: (_) {
-                  setState(() {
-                    _updateUploadButtonVisibility();
-                  });
-                },
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        labelText: 'Kelas',
-                        labelStyle: GoogleFonts.poppins(),
-                      ),
-                      value: _selectedKelas,
-                      items: ['Kelas 7', 'Kelas 8', 'Kelas 9']
-                          .map((kelas) => DropdownMenuItem<String>(
-                                value: kelas,
-                                child: Text(
-                                  kelas,
-                                  style: GoogleFonts.poppins(),
-                                ),
-                              ))
-                          .toList(),
-                      onChanged: (String? selectedKelas) {
-                        setState(() {
-                          _selectedKelas = selectedKelas;
-                          _selectedSemester = null; // Reset selected semester
-                          _semesterOptions = _getSemesterOptions(selectedKelas);
-                          _updateUploadButtonVisibility();
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: Opacity(
-                      opacity: _selectedKelas != null ? 1.0 : 0.5,
-                      child: DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          labelText: 'Semester',
-                        ),
-                        value: _selectedSemester,
-                        items: _semesterOptions
-                            .map((semester) => DropdownMenuItem<String>(
-                                  value: semester,
-                                  child: Text(
-                                    semester,
-                                    style: GoogleFonts.poppins(),
-                                  ),
-                                ))
-                            .toList(),
-                        onChanged: (String? selectedSemester) {
-                          setState(() {
-                            _selectedSemester = selectedSemester;
-                            _updateUploadButtonVisibility();
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  final result = await FilePicker.platform.pickFiles();
-                  if (result != null) {
-                    setState(() {
-                      _selectedFiles
-                          .addAll(result.files.map((file) => File(file.path!)));
-                      _updateUploadButtonVisibility();
-                    });
-                  }
-                },
-                child: Text(
-                  'Pilih File',
-                  style: GoogleFonts.poppins(),
-                ),
-              ),
-              Visibility(
-                visible: _canUpload(),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Memastikan semua field yang diperlukan terisi
-                    if (_canUpload()) {
-                      // Mendapatkan instance Firestore
-                      final firestore = FirebaseFirestore.instance;
-
-                      // Menyiapkan data yang akan disimpan
-                      final data = {
-                        'judulMateri': _judulMateriController.text,
-                        'keteranganMateri': _keteranganMateriController.text,
-                        'kelas': _selectedKelas,
-                        'semester': _selectedSemester,
-                        // Tambahkan data lain jika diperlukan
-                      };
-
-                      // Menambahkan data ke Firestore
-                      firestore.collection('Agama').add(data).then((value) {
-                        // Data berhasil disimpan
-                        print('Data berhasil disimpan dengan ID: ${value.id}');
-                        // Reset field setelah disimpan
-                        _judulMateriController.clear();
-                        _keteranganMateriController.clear();
-                        setState(() {
-                          _selectedKelas = null;
-                          _selectedSemester = null;
-                          _selectedFiles.clear();
-                          _filesUploaded = false;
-                        });
-                      }).catchError((error) {
-                        // Kesalahan saat menyimpan data
-                        print('Error: $error');
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // TextFields for Judul Materi and Keterangan Materi
+            TextFormField(
+              controller: _judulMateriController,
+              decoration: InputDecoration(labelText: 'Judul Materi'),
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              controller: _keteranganMateriController,
+              decoration: InputDecoration(labelText: 'Keterangan Materi'),
+              maxLines: null,
+            ),
+            SizedBox(height: 20),
+            // Dropdowns for Kelas and Semester
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedKelas,
+                    items: ['Kelas 7', 'Kelas 8', 'Kelas 9']
+                        .map((kelas) => DropdownMenuItem<String>(
+                              value: kelas,
+                              child: Text(kelas),
+                            ))
+                        .toList(),
+                    onChanged: (selectedKelas) {
+                      setState(() {
+                        _selectedKelas = selectedKelas;
+                        _selectedSemester = null;
+                        _semesterOptions = _getSemesterOptions(selectedKelas!);
+                        _updateUploadButtonVisibility();
                       });
-                    }
-                  },
-                  child: Text(
-                    'Unggah',
-                    style: GoogleFonts.poppins(),
+                    },
+                    decoration: InputDecoration(labelText: 'Kelas'),
                   ),
                 ),
+                SizedBox(width: 20),
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedSemester,
+                    items: _semesterOptions
+                        .map((semester) => DropdownMenuItem<String>(
+                              value: semester,
+                              child: Text(semester),
+                            ))
+                        .toList(),
+                    onChanged: (selectedSemester) {
+                      setState(() {
+                        _selectedSemester = selectedSemester;
+                        _updateUploadButtonVisibility();
+                      });
+                    },
+                    decoration: InputDecoration(labelText: 'Semester'),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            // Button to pick files
+            ElevatedButton(
+              onPressed: _pickFiles,
+              child: Text('Pilih File'),
+            ),
+            SizedBox(height: 20),
+            // List of selected files
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: _selectedFiles.map((file) {
+                return ListTile(
+                  leading: Icon(_getFileIcon(file.path)),
+                  title: Text(file.path.split('/').last),
+                  trailing: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        _selectedFiles.remove(file);
+                        _updateUploadButtonVisibility();
+                      });
+                    },
+                  ),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 20),
+            // Button to upload files
+            Visibility(
+              visible: _filesUploaded,
+              child: ElevatedButton(
+                onPressed: _uploadFiles,
+                child: Text('Unggah'),
               ),
-              const SizedBox(height: 15),
-              // Display selected files
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: _selectedFiles.map((file) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Card(
-                      elevation: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          children: [
-                            Icon(_getFileIcon(file.path)),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                file.path.split('/').last,
-                                style: GoogleFonts.poppins(),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _selectedFiles.remove(file);
-                                  _updateUploadButtonVisibility();
-                                });
-                              },
-                              child: const Icon(Icons.close),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 20),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  List<String> _getSemesterOptions(String? kelas) {
+  List<String> _getSemesterOptions(String kelas) {
     if (kelas == 'Kelas 7') {
       return ['Semester 1', 'Semester 2'];
     } else if (kelas == 'Kelas 8') {
@@ -284,19 +164,117 @@ class _CreatePageState extends State<CreatePage> {
     }
   }
 
+  void _pickFiles() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      setState(() {
+        _selectedFiles.addAll(result.files.map((file) => File(file.path!)));
+        _updateUploadButtonVisibility();
+      });
+    }
+  }
+
   bool _canUpload() {
-    return (_selectedKelas != null &&
+    return _selectedKelas != null &&
         _selectedSemester != null &&
         _judulMateriController.text.isNotEmpty &&
-        _keteranganMateriController.text.isNotEmpty);
+        _keteranganMateriController.text.isNotEmpty &&
+        _selectedFiles.isNotEmpty;
   }
 
   void _updateUploadButtonVisibility() {
     setState(() {
-      // Check if all required fields are filled and at least one file is selected
       _filesUploaded = _canUpload();
     });
   }
+
+void _uploadFiles() async {
+  try {
+    List<Map<String, dynamic>> uploadedFiles = [];
+    final FirebaseStorage storage = FirebaseStorage.instance;
+    final CollectionReference materiCollection =
+        FirebaseFirestore.instance.collection('Agama');
+
+    for (File file in _selectedFiles) {
+      String fileName = file.path.split('/').last;
+      Reference ref = storage.ref().child('materi').child(fileName);
+
+      await ref.putFile(file);
+
+      String fileUrl = await ref.getDownloadURL();
+      String fileType = _getFileType(fileName); // Determine file type based on extension
+
+      uploadedFiles.add({
+        'fileName': fileName,
+        'fileUrl': fileUrl,
+        'fileType': fileType,
+      });
+    }
+
+    // Data to be saved in Firestore
+    Map<String, dynamic> data = {
+      'judulMateri': _judulMateriController.text,
+      'keteranganMateri': _keteranganMateriController.text,
+      'kelas': _selectedKelas,
+      'semester': _selectedSemester,
+      'files': uploadedFiles,
+    };
+
+    await materiCollection.add(data);
+
+    // Clear fields and update state after successful upload
+    _judulMateriController.clear();
+    _keteranganMateriController.clear();
+    setState(() {
+      _selectedKelas = null;
+      _selectedSemester = null;
+      _selectedFiles.clear();
+      _filesUploaded = false;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('File berhasil diunggah dan data disimpan'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  } catch (e) {
+    print('Error uploading files: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Gagal mengunggah file: $e'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+}
+
+String _getFileType(String fileName) {
+  String extension = fileName.split('.').last.toLowerCase();
+  switch (extension) {
+    case 'pdf':
+      return 'PDF Document';
+    case 'doc':
+    case 'docx':
+      return 'Word Document';
+    case 'xls':
+    case 'xlsx':
+      return 'Excel Spreadsheet';
+    case 'ppt':
+    case 'pptx':
+      return 'PowerPoint Presentation';
+    case 'jpg':
+    case 'jpeg':
+    case 'png':
+      return 'Image';
+    case 'mp4':
+    case 'mov':
+      return 'Video';
+    default:
+      return 'File';
+  }
+}
+
 
   @override
   void dispose() {

@@ -1,5 +1,6 @@
 // Model untuk data materi PKN
 import 'package:EduPlan/BhsIndonesia/create.dart';
+import 'package:EduPlan/BhsIndonesia/materi.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -121,6 +122,22 @@ class _kelas7State extends State<kelas7> {
                             materi.keterangan,
                             style: GoogleFonts.poppins(),
                           ),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              // Panggil fungsi untuk menghapus materi
+                              _deleteMateri(materi.id);
+                            },
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailMateriPage(
+                                    materi: snapshot.data!.docs[index]),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     );
@@ -194,6 +211,22 @@ class _kelas7State extends State<kelas7> {
                             materi.keterangan,
                             style: GoogleFonts.poppins(),
                           ),
+                          trailing: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              // Panggil fungsi untuk menghapus materi
+                              _deleteMateri(materi.id);
+                            },
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailMateriPage(
+                                    materi: snapshot.data!.docs[index]),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     );
@@ -235,5 +268,27 @@ class _kelas7State extends State<kelas7> {
         ),
       ),
     );
+  }
+
+  void _deleteMateri(String materiId) {
+    // Hapus materi dari Firestore berdasarkan ID
+    firestoreService.collection('Bahasa Indonesia').doc(materiId).delete().then((value) {
+      // Materi berhasil dihapus, lakukan apa yang diperlukan setelah penghapusan
+      // Misalnya, tampilkan pesan sukses atau perbarui tampilan
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Materi berhasil dihapus'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }).catchError((error) {
+      // Handle error jika gagal menghapus materi
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal menghapus materi: $error'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    });
   }
 }

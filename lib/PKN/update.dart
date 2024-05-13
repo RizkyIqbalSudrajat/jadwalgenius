@@ -1,10 +1,10 @@
-import 'package:EduPlan/PKN/kelas7.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:file_picker/file_picker.dart';
 
 class UpdatePage extends StatefulWidget {
   final DocumentSnapshot materi;
@@ -18,11 +18,12 @@ class UpdatePage extends StatefulWidget {
 class _UpdatePageState extends State<UpdatePage> {
   late String _selectedKelas;
   late String _selectedSemester;
-  List<File> _selectedFiles = [];
+  late List<Map<String, dynamic>> _selectedFiles = [];
   final TextEditingController _judulMateriController = TextEditingController();
   final TextEditingController _keteranganMateriController =
       TextEditingController();
   bool _filesUploaded = false;
+  final storage = FirebaseStorage.instance;
 
   @override
   void initState() {
@@ -31,7 +32,10 @@ class _UpdatePageState extends State<UpdatePage> {
     _selectedSemester = widget.materi['semester'];
     _judulMateriController.text = widget.materi['judulMateri'];
     _keteranganMateriController.text = widget.materi['keteranganMateri'];
-    // Jika ada file terlampir, Anda dapat menginisialisasi _selectedFiles di sini
+    _selectedFiles = List<Map<String, dynamic>>.from(widget.materi['files']);
+
+    // Update upload button visibility based on attached files
+    _updateUploadButtonVisibility();
   }
 
   @override
@@ -62,7 +66,7 @@ class _UpdatePageState extends State<UpdatePage> {
         actions: [
           IconButton(
             onPressed: () {
-              // Tambahkan logika untuk tombol "Simpan" di sini
+              // Add logic for "Save" button here
               _updateMateri();
             },
             icon: const Icon(Icons.save),
@@ -105,8 +109,15 @@ class _UpdatePageState extends State<UpdatePage> {
                   final result = await FilePicker.platform.pickFiles();
                   if (result != null) {
                     setState(() {
-                      _selectedFiles
-                          .addAll(result.files.map((file) => File(file.path!)));
+                      _selectedFiles.addAll(
+                        result.files.map(
+                          (file) => {
+                            'fileName': file.name,
+                            'fileUrl': file.path,
+                            'fileType': _getFileType(file.name),
+                          },
+                        ),
+                      );
                       _updateUploadButtonVisibility();
                     });
                   }
@@ -129,11 +140,11 @@ class _UpdatePageState extends State<UpdatePage> {
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
                           children: [
-                            Icon(_getFileIcon(file.path)),
+                            Icon(_getFileIcon(file['fileName'])),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
-                                file.path.split('/').last,
+                                file['fileName'],
                                 style: GoogleFonts.poppins(),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -161,24 +172,24 @@ class _UpdatePageState extends State<UpdatePage> {
     );
   }
 
-  IconData _getFileIcon(String path) {
-    if (path.toLowerCase().endsWith('.pdf')) {
+  IconData _getFileIcon(String fileName) {
+    if (fileName.toLowerCase().endsWith('.pdf')) {
       return Icons.picture_as_pdf;
-    } else if (path.toLowerCase().endsWith('.doc') ||
-        path.toLowerCase().endsWith('.docx')) {
+    } else if (fileName.toLowerCase().endsWith('.doc') ||
+        fileName.toLowerCase().endsWith('.docx')) {
       return Icons.description;
-    } else if (path.toLowerCase().endsWith('.xls') ||
-        path.toLowerCase().endsWith('.xlsx')) {
+    } else if (fileName.toLowerCase().endsWith('.xls') ||
+        fileName.toLowerCase().endsWith('.xlsx')) {
       return Icons.table_chart;
-    } else if (path.toLowerCase().endsWith('.ppt') ||
-        path.toLowerCase().endsWith('.pptx')) {
+    } else if (fileName.toLowerCase().endsWith('.ppt') ||
+        fileName.toLowerCase().endsWith('.pptx')) {
       return Icons.slideshow;
-    } else if (path.toLowerCase().endsWith('.jpg') ||
-        path.toLowerCase().endsWith('.jpeg') ||
-        path.toLowerCase().endsWith('.png')) {
+    } else if (fileName.toLowerCase().endsWith('.jpg') ||
+        fileName.toLowerCase().endsWith('.jpeg') ||
+        fileName.toLowerCase().endsWith('.png')) {
       return Icons.image;
-    } else if (path.toLowerCase().endsWith('.mp4') ||
-        path.toLowerCase().endsWith('.mov')) {
+    } else if (fileName.toLowerCase().endsWith('.mp4') ||
+        fileName.toLowerCase().endsWith('.mov')) {
       return Icons.videocam;
     } else {
       return Icons.insert_drive_file;
@@ -194,41 +205,122 @@ class _UpdatePageState extends State<UpdatePage> {
     });
   }
 
-  void _updateMateri() {
+  Future<void> _updateMateri() async {
     if (_filesUploaded) {
-      // Mendapatkan instance Firestore
-      final firestore = FirebaseFirestore.instance;
+      try {
+        final firestore = FirebaseFirestore.instance;
 
-      // Menyiapkan data yang akan diperbarui
-      final data = {
-        'judulMateri': _judulMateriController.text,
-        'keteranganMateri': _keteranganMateriController.text,
-        'kelas': _selectedKelas,
-        'semester': _selectedSemester,
-        'files': _selectedFiles.map((file) {
-          // Contoh menyimpan informasi file ke Firestore
-          return {
-            'fileName': file.path.split('/').last,
-            'filePath': file.path, // atau URL file jika disimpan di Storage
-            'fileType': _getFileIcon(file.path).toString(),
-          };
-        }).toList(),
-        // Tambahkan data lain jika diperlukan
-      };
+        List<Map<String, dynamic>> uploadedFiles = [];
 
-      // Memperbarui data di Firestore
-      firestore
-          .collection('PKN')
-          .doc(widget.materi.id) // Gunakan ID dokumen yang ingin diperbarui
-          .update(data)
-          .then((_) {
-        // Data berhasil diperbarui
-        print('Data berhasil diperbarui');
-        Navigator.pop(context); // Kembali ke halaman sebelumnya
-      }).catchError((error) {
-        // Kesalahan saat memperbarui data
-        print('Error: $error');
-      });
+        for (Map<String, dynamic> fileData in _selectedFiles) {
+          String fileName = fileData['fileName'];
+          String filePath = fileData['fileUrl'];
+          File file = File(filePath);
+
+          String fileUrl = ''; // Default empty URL
+
+          if (filePath.isNotEmpty && file.existsSync()) {
+            // File path exists, meaning file was selected again
+            fileUrl = await _uploadFileToFirebaseStorage(file);
+          } else {
+            // No file path, retain existing file URL
+            fileUrl = fileData['fileUrl'] ?? '';
+          }
+
+          uploadedFiles.add({
+            'fileName': fileName,
+            'fileUrl': fileUrl,
+            'fileType': _getFileType(fileName),
+          });
+        }
+
+        // Data of the materi to be updated in Firestore
+        final data = {
+          'judulMateri': _judulMateriController.text,
+          'keteranganMateri': _keteranganMateriController.text,
+          'kelas': _selectedKelas,
+          'semester': _selectedSemester,
+          'files': uploadedFiles, // Uploaded file information
+          // Add other data if needed
+        };
+
+        // Update materi data in Firestore
+        await firestore.collection('PKN').doc(widget.materi.id).update(data);
+
+        // Data successfully updated
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Data berhasil diperbarui'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        // Navigate back to previous page
+        Navigator.pop(context);
+      } catch (e) {
+        // Handle errors during file upload or data saving
+        print('Error: $e');
+        // Show error message to the user
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal mengupdate materi: $e'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    } else {
+      // Show message if any field is not filled correctly
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Harap lengkapi semua bidang terlebih dahulu'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  Future<String> _uploadFileToFirebaseStorage(File file) async {
+    try {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      String fileName = file.path.split('/').last;
+      Reference ref = storage.ref().child('files').child(fileName);
+
+      UploadTask uploadTask = ref.putFile(file);
+      TaskSnapshot snapshot = await uploadTask;
+
+      // Get download URL of the uploaded file
+      String fileUrl = await snapshot.ref.getDownloadURL();
+
+      return fileUrl;
+    } catch (e) {
+      print('Error uploading file to Firebase Storage: $e');
+      return '';
+    }
+  }
+
+  String _getFileType(String fileName) {
+    String extension = fileName.split('.').last.toLowerCase();
+    switch (extension) {
+      case 'pdf':
+        return 'PDF Document';
+      case 'doc':
+      case 'docx':
+        return 'Word Document';
+      case 'xls':
+      case 'xlsx':
+        return 'Excel Spreadsheet';
+      case 'ppt':
+      case 'pptx':
+        return 'PowerPoint Presentation';
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+        return 'Image';
+      case 'mp4':
+      case 'mov':
+        return 'Video';
+      default:
+        return 'File';
     }
   }
 
